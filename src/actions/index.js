@@ -22,6 +22,7 @@ export const AI_MONSTER = 'AI_MONSTER';
 export const FIGHT = 'FIGHT';
 export const LEADERBOARD = 'LEADERBOARD';
 export const TOKEN = 'TOKEN';
+export const RELOGIN = 'RELOGIN';
 
 
 
@@ -261,9 +262,17 @@ export function createUser(props){
 }
 
 export function isTokenExired(token){
-    const request = axios.get(`http://localhost:8080/api/check/token?token=${token}`);
+    const request = axios.get(`http://localhost:8000/api/check/token?token=${token}`);
     return{
         type: TOKEN,
+        payload: request
+    };
+}
+
+export function relogin(token) {
+    const request = axios.get(`http://localhost:8000/api/renew/token?token=${token}`);
+    return{
+        type: RELOGIN,
         payload: request
     };
 }

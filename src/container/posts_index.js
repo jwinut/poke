@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchMonster,fetchStopStation,createMove,fetchMonsterBag,fetchLeaderboard } from '../actions/index';
+import { fetchMonster,fetchStopStation,createMove,fetchMonsterBag,fetchLeaderboard,isTokenExired,relogin } from '../actions/index';
 import { Link } from 'react-router';
 import GoogleMap from '../component/GoogleMap';
+
 import { saveToCookie, removeCookieWithValue,getValueFromCookie, _COOKIE } from '../components/Cookie';
 
 
@@ -15,12 +16,19 @@ class PostsIndex extends Component {
         longitude: 102.41455078125,
     };
     componentWillMount() {
-        console.log('tokeAczn',getValueFromCookie('tok'));
+       // console.log('tokeAczn',getValueFromCookie('tok'));
+        // const token = getValueFromCookie('tok')
+        // this.props.isTokenExired(token);
+        // const tokencheck = this.props.tokencheck.token_check;
+        // if(tokencheck){this.props.relogin(token);}
     }
 
 
     handleGeolocation = () => {
         const token = getValueFromCookie('tok')
+        this.props.isTokenExired(token);
+        const tokencheck = this.props.tokencheck.token_check;
+        if(tokencheck){this.props.relogin(token);}
         const lat = +document.getElementById('latitude').value;
         const lon = +document.getElementById('longitude').value;
         this.props.createMove(lat,lon,token);
@@ -31,6 +39,10 @@ class PostsIndex extends Component {
 
     handleMonster= () =>{
         const token = getValueFromCookie('tok')
+        this.props.isTokenExired(token);
+        const tokencheck = this.props.tokencheck.token_check;
+        console.log('tokencheckMonster',tokencheck)
+        if(tokencheck){this.props.relogin(token);}
         //console.log('monster',this.state)
         const random = Math.random();
         //console.log('token',token);
@@ -45,12 +57,12 @@ class PostsIndex extends Component {
             longitude: lng
         })
     };
-    handleStopSign = ()=>{
-        const token = getValueFromCookie('tok')
-        this.props.fetchStopStation(this.state.latitude,this.state.longitude,token)
-    }
+ 
     handleMonsterBag = () =>{
         const token = getValueFromCookie('tok')
+        this.props.isTokenExired(token);
+        const tokencheck = this.props.tokencheck.token_check;
+        if(tokencheck){this.props.relogin(token);}
         this.props.fetchMonsterBag(token);
     }
     handleLeaderboard = () =>{
@@ -62,6 +74,7 @@ class PostsIndex extends Component {
     render(){
         //console.log(this.props.login,_.isNull(this.props.login.login) ? 'esad': this.props.login.login.token)
         const {latitude,longitude} = this.state
+        console.log('tokencheck',this.props.tokencheck.token_check)
         return (
             <div>
                 <div className="text-xs-right" >
@@ -80,7 +93,6 @@ class PostsIndex extends Component {
                     <Link to="pokeball" className ="btn btn-primary" onClick={this.handleMonster}>
                         Monster
                     </Link>
-                    <button className="btn btn-primary" onClick={this.handleStopSign}>Stop Station</button><br/>
 
                     {/*<button className="btn btn-primary" onClick={this.handleMonsterBag}>Monster Bag</button><br/>*/}
                     <Link to="monsterbag" className="btn btn-primary" onClick={this.handleMonsterBag}>
@@ -112,8 +124,10 @@ function mapStateToProps(state){
              monster:state.monster,
              stopsigns: state.stopsigns,
              login: state.login,
-             monsterbag: state.monsterbag
+             monsterbag: state.monsterbag,
+             tokencheck: state.tokencheck,
+             relogin: state.relogin
     };
 }
 
-export default connect(mapStateToProps,{ fetchMonster,fetchStopStation,createMove,fetchMonsterBag,fetchLeaderboard }) (PostsIndex);
+export default connect(mapStateToProps,{ fetchMonster,fetchStopStation,createMove,fetchMonsterBag,fetchLeaderboard,isTokenExired,relogin }) (PostsIndex);
