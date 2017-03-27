@@ -37,24 +37,24 @@ class AccessingArgumentsExample extends Component {
         this.handleNewCookie = _.debounce(this.handleNewCookie,100);
     }
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps !== this.props){
-            // console.log('props',this.props,nextProps)
-            // console.log('lat',nextProps.latitude)
-            // console.log('f',nextProps.latitude)
-            const newLatLng = new google.maps.LatLng(nextProps.latitude,nextProps.longitude);
-            this.setState({
-                center: newLatLng,
-                markers: [
-                    ...this.state.markers,
-                    {position: newLatLng},
-                ],
-            });
-        }
-    }
+    // componentWillReceiveProps(nextProps){
+    //     if(nextProps !== this.props){
+    //         // console.log('props',this.props,nextProps)
+    //         // console.log('lat',nextProps.latitude)
+    //         // console.log('f',nextProps.latitude)
+    //         const newLatLng = new google.maps.LatLng(nextProps.latitude,nextProps.longitude);
+    //         this.setState({
+    //             center: newLatLng,
+    //             markers: [
+    //                 ...this.state.markers,
+    //                 {position: newLatLng},
+    //             ],
+    //         });
+    //     }
+    // }
     state = {
-        markers: [],
-        center: new google.maps.LatLng(12.811801316582619, 102.41455078125),
+        markers: [ ],
+        center: new google.maps.LatLng(13.730046, 100.778366),
     };
 
     handleMapClick = this.handleMapClick.bind(this);
